@@ -1,2 +1,2 @@
 # LCO-Embedding
-[NeurIPS 2025] Scaling Language-centric Omni-modal Representation Learning
+[NeurIPS 2025] Scaling Language-centric Omnimodal Representation Learning
