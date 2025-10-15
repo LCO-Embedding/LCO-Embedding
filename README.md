@@ -14,33 +14,32 @@
 <div>
     <em>DAMO Academy, Alibaba Group</em>&emsp;
 </div>
-    <em><sup>†</sup>Corresponding Authors &emsp;<sup>‡</sup>Project Head</em>
+<em><sup>†</sup>Corresponding Authors &emsp;<sup>‡</sup>Project Head</em>
 
-<div align="center">
-  <a href="https://huggingface.co/papers/2510.11693" target="_blank">
-    <img src="https://img.shields.io/badge/Paper-arXiv-red">
-  </a>
-  <a href="https://huggingface.co/LCO-Embedding" target="_blank">
-    <img src="https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Collections-blue">
-  </a>
-</div>
+<h5 align="center">
 
+[![arXiv](https://img.shields.io/badge/Arxiv-2510.11693-AD1C18.svg?logo=arXiv)](https://arxiv.org/abs/2510.11693)
+[![hf_paper](https://img.shields.io/badge/🤗-Paper%20In%20HF-red.svg)](https://huggingface.co/papers/2510.11693)
+[![hf_collection](https://img.shields.io/badge/🤗%20Hugging%20Face-Collections-blue.svg)](https://huggingface.co/MMR1/datasets)
+<br>
+</h5> 
 
----
 
 </div>
 
-#### 🌟This repo contains the code and datasets for the paper "Scaling Language-centric Omnimodal Representation Learning" to appear at NeurIPS 2025.
+<h5 align="center"> 🌟 This repo contains the codes and datasets for the paper "Scaling Language-centric Omnimodal Representation Learning" to appear at NeurIPS 2025. If our project helps you, please give us a star ⭐ on GitHub and upvote our HF paper to support us. 🙏🙏 </h2>
 
-## 🎉 Updates
+
+<h2>🎉 Updates</h2>
+
 - **[2025-10]** Check out our [paper](https://huggingface.co/papers/2510.11693) on Huggingface Daily Papers.
 - **[2025-09]** Our paper is accepted by NeurIPS 2025.
 
-## Overview
+<h2>Overview</h2>
 
-- We introduce LCO-Embedding, a language-centric omnimodal representation learning method and the LCO-Embedding model families, setting a new state-of-the-art on MIEB (Massive Image Embedding Benchmark) while supporting audio and videos.
-- We introduce Generation-Representation Scaling law, and connect models' generative capabilities and their representation upper bound.
-- We introduce SeaDoc, a challenging visual document retrieval task in southeast Asian languages; and show that continual generative pretraining before contrastive learning raises the representation upper bound.
+- We introduce **LCO-Embedding**, a language-centric omnimodal representation learning method and the LCO-Embedding model families, setting a new state-of-the-art on [MIEB](https://huggingface.co/blog/isaacchung/introducing-mieb) (Massive Image Embedding Benchmark), while supporting audio and videos.
+- We introduce the **Generation-Representation Scaling Law**, and connect models' generative capabilities and their representation upper bound.
+- We introduce **SeaDoc**, a challenging visual document retrieval task in Southeast Asian languages, and show that continual generative pretraining before contrastive learning raises the representation upper bound.
 
 <div align='center'><img src="https://cdn-uploads.huggingface.co/production/uploads/604f67ef0fe8ff3ec13d71ef/4Wd8fDFBdT6GxqN6-KzZN.png" alt="overview" width="80%"/></div>
 
