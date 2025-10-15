@@ -34,7 +34,7 @@
 
 ## 🎉 Updates
 - **[2025-10]** Check out our [paper](https://huggingface.co/papers/2510.11693) on Huggingface Daily Papers.
-- **[2025-09]** Our paper is accepted by ACL 2025.
+- **[2025-09]** Our paper is accepted by NeurIPS 2025.
 
 ## Overview
 
