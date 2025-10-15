@@ -42,6 +42,6 @@
 - We introduce Generation-Representation Scaling law, and connect models' generative capabilities and their representation upper bound.
 - We introduce SeaDoc, a challenging visual document retrieval task in southeast Asian languages; and show that continual generative pretraining before contrastive learning raises the representation upper bound.
 
-<div align='center'><img src="https://cdn-uploads.huggingface.co/production/uploads/604f67ef0fe8ff3ec13d71ef/4Wd8fDFBdT6GxqN6-KzZN.png" alt="overview" width="45%"/></div>
+<div align='center'><img src="https://cdn-uploads.huggingface.co/production/uploads/604f67ef0fe8ff3ec13d71ef/4Wd8fDFBdT6GxqN6-KzZN.png" alt="overview" width="80%"/></div>
 
 We are updating all code and resources.
