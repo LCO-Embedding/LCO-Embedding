@@ -20,7 +20,7 @@
 
 [![arXiv](https://img.shields.io/badge/Arxiv-2510.11693-AD1C18.svg?logo=arXiv)](https://arxiv.org/abs/2510.11693)
 [![hf_paper](https://img.shields.io/badge/🤗-Paper%20In%20HF-red.svg)](https://huggingface.co/papers/2510.11693)
-[![hf_collection](https://img.shields.io/badge/🤗%20Hugging%20Face-Collections-blue.svg)](https://huggingface.co/MMR1/datasets)
+[![hf_collection](https://img.shields.io/badge/🤗%20Hugging%20Face-Collections-blue.svg)](https://huggingface.co/LCO-Embedding)
 <br>
 </h5> 
 
