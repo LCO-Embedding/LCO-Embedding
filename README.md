@@ -27,7 +27,7 @@
 
 </div>
 
-<h5 align="center"> 🌟 This repo contains the codes and datasets for the paper "Scaling Language-centric Omnimodal Representation Learning" to appear at NeurIPS 2025. If our project helps you, please give us a star ⭐ on GitHub and upvote our HF paper to support us. 🙏🙏 </h2>
+<h5 align="center"> 🌟 This repo contains the codes and datasets for the paper "Scaling Language-centric Omnimodal Representation Learning" to appear at NeurIPS 2025. If our project helps you, please give us a star ⭐ on GitHub and upvote our HF paper to support us. </h2>
 
 
 <h2>🎉 Updates</h2>
@@ -42,7 +42,9 @@ from transformers import Qwen2_5OmniThinkerForConditionalGeneration, Qwen2_5Omni
 from qwen_omni_utils import process_mm_info
 
 processor = Qwen2_5OmniProcessor.from_pretrained("LCO-Embedding/LCO-Embedding-Omni-7B") # or add a `max_pixels = 1280*28*28' for efficient encoding
-model = Qwen2_5OmniThinkerForConditionalGeneration.from_pretrained("LCO-Embedding/LCO-Embedding-Omni-7B")
+model = Qwen2_5OmniThinkerForConditionalGeneration.from_pretrained("LCO-Embedding/LCO-Embedding-Omni-7B",
+                                                                    torch_dtype=torch.bfloat16,
+                                                                    device_map="auto")
 ```
 
 <h3>Text Batch Encodings:</h3>
