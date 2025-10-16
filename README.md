@@ -35,6 +35,97 @@
 - **[2025-10]** Check out our [paper](https://huggingface.co/papers/2510.11693) on Huggingface Daily Papers.
 - **[2025-09]** Our paper is accepted by NeurIPS 2025.
 
+<h2>Quick Start</h2>
+
+```python
+from transformers import Qwen2_5OmniThinkerForConditionalGeneration, Qwen2_5OmniProcessor
+from qwen_omni_utils import process_mm_info
+
+processor = Qwen2_5OmniProcessor.from_pretrained("LCO-Embedding/LCO-Embedding-Omni-7B") # or add a `max_pixels = 1280*28*28' for efficient encoding
+model = Qwen2_5OmniThinkerForConditionalGeneration.from_pretrained("LCO-Embedding/LCO-Embedding-Omni-7B")
+```
+
+<h3>Text Batch Encodings:</h3>
+    
+```python
+texts = ["some random text", "a second random text", "a third random text"] * 30
+batch_size = 8
+text_prompt =  "{}\nSummarize the above text in one word:" 
+
+all_text_embeddings = []
+
+with torch.no_grad():
+    for i in tqdm(range(0, len(texts), batch_size)):
+        batch_texts = texts[i : i + batch_size]
+        batch_texts = [text_prompt.format(text) for text in batch_texts]
+        messages = [[
+            {
+                "role": "user",
+                "content": [
+                    {"type": "text", "text":text},
+                ],
+
+            }
+        ] for text in batch_texts]
+        text_inputs = processor.apply_chat_template(messages, tokenize = False, add_generation_prompt = True)
+        text_inputs = processor(
+        text = text_inputs,
+        padding = True,
+        return_tensors = "pt",
+        )
+        text_inputs = text_inputs.to("cuda")
+        text_outputs = model(
+            **text_inputs, output_hidden_states=True, return_dict=True
+        ).hidden_states[-1][:, -1, :]
+        all_text_embeddings.append(text_outputs.to(torch.float16).cpu())
+
+all_text_embeddings = torch.cat(all_text_embeddings, dim=0)
+```
+
+<h3>Image Batch Encodings:</h3>
+
+```python
+
+images = [some random PIL.Image] * 100 # will be good to load them using dataloader; see MIEB evaluation pipeline
+image_prompt = "\nSummarize the above image in one word:"
+batch_size = 8
+
+all_image_embeddings = []
+
+with torch.no_grad():
+    for i in tqdm(range(0, len(images), batch_size)):
+        batch_images = images[i : i + batch_size]
+        messages = [[
+            {
+                "role": "user",
+                "content": [
+                    {"type": "image", "image":image},
+                    {"type": "text", "text": image_prompt},
+                ],
+
+            }
+        ] for image in batch_images]
+        text = processor.apply_chat_template(
+            messages, tokenize=False, add_generation_prompt=True
+        )
+        audio_inputs, image_inputs, video_inputs = process_mm_info(messages, use_audio_in_video=True)
+        inputs = processor(
+            text=text, 
+            audio=audio_inputs, 
+            images=image_inputs, 
+            videos=video_inputs, 
+            return_tensors="pt", 
+            padding=True
+        )
+        inputs = inputs.to("cuda")
+        image_outputs = model(
+            **inputs, output_hidden_states=True, return_dict=True
+        ).hidden_states[-1][:, -1, :]
+        all_image_embeddings.append(image_outputs.to(torch.float16).cpu())
+
+all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
+```
+
 <h2><img src="./assets/LCO-logo.png" width="30"> Overview</h2>
 
 - We introduce **LCO-Embedding**, a language-centric omnimodal representation learning method and the LCO-Embedding model families, setting a new state-of-the-art on [MIEB](https://huggingface.co/blog/isaacchung/introducing-mieb) (Massive Image Embedding Benchmark), while supporting audio and videos.
