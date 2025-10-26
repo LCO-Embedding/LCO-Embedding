@@ -7,22 +7,24 @@ import torch
 import bitsandbytes as bnb
 from datasets import load_dataset
 from transformers import Trainer, TrainingArguments, AutoProcessor
-from qwen_vl_utils import process_vision_info
+from qwen_omni_utils import process_mm_info
 import torch.distributed as dist
 from PIL import Image
 Image.MAX_IMAGE_PIXELS = None
 from transformers import set_seed, BitsAndBytesConfig
 from peft import prepare_model_for_kbit_training, LoraConfig, get_peft_model
 from transformers.modeling_outputs import CausalLMOutputWithPast
-from transformers import Qwen2_5_VLForConditionalGeneration
+from transformers import Qwen2_5OmniForConditionalGeneration
 from dataclasses import dataclass
 import torch.nn.functional as F
 from PIL import ImageFile
+import warnings
+warnings.filterwarnings("ignore")
+
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 os.environ["WANDB_MODE"] = "disabled"
 os.environ["WANDB_SILENT"] = "true"
-
 @dataclass
 class DataCollatorForAny2AnyContrastive:
     """
@@ -91,29 +93,39 @@ class DataCollatorForAny2AnyContrastive:
         batch_positive_prompts = self.processor.apply_chat_template(batch_positive_messages, tokenize=False, add_generation_prompt=True)
         batch_negative_prompts = self.processor.apply_chat_template(batch_negative_messages, tokenize=False, add_generation_prompt=True)
 
-        loaded_anchor_images, _ = process_vision_info(batch_anchor_messages)
-        loaded_positive_images, _ = process_vision_info(batch_positive_messages)
-        loaded_negative_images, _ = process_vision_info(batch_negative_messages)
+        USE_AUDIO_IN_VIDEO = False
+        audios, loaded_anchor_images, videos = process_mm_info(batch_anchor_messages, use_audio_in_video=USE_AUDIO_IN_VIDEO)
+        audios, loaded_positive_images, videos = process_mm_info(batch_positive_messages, use_audio_in_video=USE_AUDIO_IN_VIDEO)
+        audios, loaded_negative_images, videos = process_mm_info(batch_negative_messages, use_audio_in_video=USE_AUDIO_IN_VIDEO)
 
         anchor_inputs = self.processor(
             text=batch_anchor_prompts,
+            audio=audios, 
             images=loaded_anchor_images,
+            videos=videos,
             return_tensors="pt",
-            padding=True
+            padding=True, 
+            use_audio_in_video=USE_AUDIO_IN_VIDEO
         )
         
         positive_inputs = self.processor(
             text=batch_positive_prompts,
+            audio=audios, 
             images=loaded_positive_images,
+            videos=videos,
             return_tensors="pt",
-            padding=True
+            padding=True, 
+            use_audio_in_video=USE_AUDIO_IN_VIDEO
         )
         
         negative_inputs = self.processor(
             text=batch_negative_prompts,
+            audio=audios, 
             images=loaded_negative_images,
+            videos=videos,
             return_tensors="pt",
-            padding=True
+            padding=True, 
+            use_audio_in_video=USE_AUDIO_IN_VIDEO
         )
 
         final_batch = {
@@ -178,7 +190,7 @@ class ContrastiveTrainer(Trainer):
 
 
         all_candidates = torch.cat([positive_embeds, negative_embeds], dim=0)
-        
+
         logits = torch.matmul(anchor_embeds, all_candidates.t()) / 0.03
 
         batch_size = anchor_embeds.size(0)
@@ -192,7 +204,7 @@ class ContrastiveTrainer(Trainer):
 def train(
     base_model: str = "",
     data_path: str = "data/LCO_multimodal.jsonl",
-    output_dir: str = "./LCO_multimodal",
+    output_dir: str = "./LCO_omni_multimodal",
     batch_size: int = 1056,
     per_device_batch_size: int = 33,
     num_epochs: int = 2,
@@ -220,7 +232,7 @@ def train(
 
     set_seed(seed)
 
-    model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
+    model = Qwen2_5OmniForConditionalGeneration.from_pretrained(
         base_model,
         quantization_config=BitsAndBytesConfig(
             load_in_4bit=True,
@@ -232,7 +244,7 @@ def train(
         device_map=device_map if ddp else "auto",
         trust_remote_code=True,
         attn_implementation=None,
-    )
+    ).thinker
 
     processor = AutoProcessor.from_pretrained(base_model, trust_remote_code=True)
     processor.tokenizer.padding_side = "left"
@@ -240,6 +252,10 @@ def train(
     print("Freezing vision tower and visual projector...")
     for name, param in model.named_parameters():
         if 'vision_tower' in name or 'visual' in name:
+            param.requires_grad = False
+    print("Freezing audio tower and audio projector...")
+    for name, param in model.named_parameters():
+        if 'audio_tower' in name or 'audio' in name:
             param.requires_grad = False
 
     if grad_checkpoint:
@@ -249,7 +265,7 @@ def train(
     def find_all_llm_linear_names(model):
         """
         Finds the full path for all linear layer names in the language model part of 
-        the Qwen-VL model. This prevents name collisions with the vision tower.
+        the Qwen-Omni thinker model. This prevents name collisions with the vision tower and the audio tower.
         """
         cls = bnb.nn.Linear4bit
         lora_module_names = set()
