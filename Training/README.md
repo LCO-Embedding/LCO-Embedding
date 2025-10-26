@@ -35,4 +35,10 @@ If you're training using many GPUs, e.g., 128 GPUs with 16 nodes, we recommend c
 Enjoy!
 
 ## Omni training scripts & resources
-Updating. Stay tuned!
+
+Qwen2.5-Omni can be run with:
+```
+bash train_omni.sh
+```
+
+The omni training code currently only supports image, text and image-text interleaved as VL code above, aligning with what we did in the paper. We will support all modalities (audio, video) after we test the optimal testing soon.
