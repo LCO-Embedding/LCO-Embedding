@@ -42,3 +42,7 @@ bash train_omni.sh
 ```
 
 The omni training code currently only supports image, text and image-text interleaved as VL code above, aligning with what we did in the paper. We will support all modalities (audio, video) after we test the optimal setting soon.
+
+## merge LoRA weights
+
+After training, run `merge_Omni.py` or `merge_VL.py` to merge the LoRA weights to the base model, and move other non-checkpoint files from the base model folder to the merged model folder, including `chat_template.json`, `merges.txt`, `preprecessor_config.json`, `tokenizer_config.json`, `tokenizer.json`, `vocab.json` for `Qwen2.5-VL` models, plus an extra `spk_dict.pt` for `Qwen2.5-Omni` models.
