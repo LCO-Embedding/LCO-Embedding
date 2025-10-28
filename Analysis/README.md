@@ -27,3 +27,27 @@ python kernel_alignment.py
 also, change the file name of the pre-encoded `image_embeddings.pt` and `text_embeddings.pt` to the path that you put it.
 
 Above we provide example for image-text analysis using PixmoCaps, you can easily extend it for video-text, audio-text, with msrvtt and audiocaps like we did in the paper, but here we omit them for brevity!
+
+
+# Reference
+
+Anisotropy estimate code adapted from:
+```
+@inproceedings{xiao2023isotropy,
+  title={On Isotropy, Contextualization and Learning Dynamics of Contrastive-based Sentence Representation Learning},
+  author={Xiao, Chenghao and Long, Yang and Al Moubayed, Noura},
+  booktitle={Findings of the Association for Computational Linguistics: ACL 2023},
+  pages={12266--12283},
+  year={2023}
+}
+```
+
+Kernel similarity structure analysis code adapted from:
+```
+@inproceedings{huh2024position,
+  title={Position: The platonic representation hypothesis},
+  author={Huh, Minyoung and Cheung, Brian and Wang, Tongzhou and Isola, Phillip},
+  booktitle={Forty-first International Conference on Machine Learning},
+  year={2024}
+}
+```

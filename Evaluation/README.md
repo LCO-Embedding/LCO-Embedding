@@ -31,3 +31,15 @@ for model_name in [
 ```
 
 note that to use your own custom model, such as `LCO-Embedding-Omni-7B`, you'll need to implement and register your model under the `MTEB-MIEB/mteb/models` folder, see our `LCO_Embedding.py` for an example.
+
+
+## Reference
+```
+@inproceedings{xiao2025mieb,
+  title={Mieb: Massive image embedding benchmark},
+  author={Xiao, Chenghao and Chung, Isaac and Kerboua, Imene and Stirling, Jamie and Zhang, Xin and Kardos, M{\'a}rton and Solomatin, Roman and Al Moubayed, Noura and Enevoldsen, Kenneth and Muennighoff, Niklas},
+  booktitle={Proceedings of the IEEE/CVF International Conference on Computer Vision},
+  pages={22187--22198},
+  year={2025}
+}
+```

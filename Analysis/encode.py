@@ -105,7 +105,7 @@ def encoding_image_all_layers(model,
                 )
                 
                 inputs = inputs.to("cuda")
-                image_outputs = model.thinker(
+                image_outputs = model(
                     **inputs, output_hidden_states=True, return_dict=True
                 ).hidden_states
 
