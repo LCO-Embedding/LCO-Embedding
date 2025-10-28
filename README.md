@@ -130,15 +130,15 @@ all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
 
 <h2>Training</h2>
 
-See our [training](https://github.com/LCO-Embedding/LCO-Embedding/tree/main/Training) folder! We will continue to update resources and guidelines for cooking the best MLLM-based omnimodal representation models which we hope will contribute to the community!
+See our [Training](https://github.com/LCO-Embedding/LCO-Embedding/tree/main/Training) folder! We will continue to update resources and guidelines for cooking the best MLLM-based omnimodal representation models which we hope will contribute to the community!
 
 <h2>Evaluation</h2>
 
-We are cleaning our unified embedding evaluation framework which will be pushed shortly.
+See [Evaluation](https://github.com/LCO-Embedding/LCO-Embedding/tree/main/Evaluation) folder for documentation and code for MIEB evaluation! It supports adding your custom models as well.
 
 <h2>Analysis</h2>
 
-We will provide embedding space analysis code which will be pushed shortly.
+See [Analysis](https://github.com/LCO-Embedding/LCO-Embedding/tree/main/Analysis) folder, which provides analysis frameworks used for Section 2 of the LCO-Embedding paper.
 
 <h2><img src="./assets/LCO-logo.png" width="30"> Overview</h2>
 
