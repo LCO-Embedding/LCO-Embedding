@@ -1,0 +1,182 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mteb"
+version = "1.36.8"
+description = "Massive Text Embedding Benchmark"
+readme = "README.md"
+authors = [
+    { name = "MTEB Contributors", email = "niklas@huggingface.co" },
+    { email = "nouamane@huggingface.co" },
+    { email = "info@nils-reimers.de" },
+]
+license = { file = "LICENSE" }
+keywords = ["deep learning", "text embeddings", "benchmark"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Information Technology",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+]
+requires-python = ">=3.9"
+dependencies = [
+    "datasets>=2.19.0,<3.0.0",
+    "numpy>=1.0.0,<3.0.0",
+    "requests>=2.26.0",
+    "scikit_learn>=1.0.2",
+    "scipy>=0.0.0",
+    "sentence_transformers>=3.0.0",
+    "typing-extensions>=4.5.0",
+    "torch>1.0.0",
+    "tqdm>1.0.0",
+    "rich>=0.0.0",
+    "pytrec-eval-terrier>=0.5.6",
+    "pydantic>=2.0.0",
+    "typing_extensions>=0.0.0",
+    "eval_type_backport>=0.0.0",
+    "polars>=0.20.22",
+    "torchvision>0.0.0",
+]
+
+
+[project.urls]
+homepage = "https://github.com/embeddings-benchmark/mteb"
+"Huggingface Organization" = "https://huggingface.co/mteb"
+"Source Code" = "https://github.com/embeddings-benchmark/mteb"
+
+[project.scripts]
+mteb = "mteb.cli:main"
+
+[project.optional-dependencies]
+dev = [
+"ruff==0.9.7", # locked so we don't get PRs which fail only due to a lint update
+"pytest>=8.3.4",
+"pytest-xdist>=3.6.1",
+"pytest-coverage>=0.0",
+"pytest-rerunfailures>=15.0",
+"iso639>=0.1.4" # used for tests/scripts/test_generate_model_meta.py
+]
+codecarbon = ["codecarbon"]
+speedtask = ["GPUtil>=1.4.0", "psutil>=5.9.8"]
+peft = ["peft>=0.11.0"]
+leaderboard = ["gradio>=5.16.0,<6.0.0", "gradio_rangeslider>=0.0.8", "plotly>=5.24.0,<6.0.0", "cachetools>=5.2.0"]
+flagembedding = ["FlagEmbedding"]
+jina = ["einops>=0.8.0"]
+flash_attention = ["flash-attn>=2.6.3"]
+openai = ["openai>=1.41.0", "tiktoken>=0.8.0"]
+model2vec = ["model2vec>=0.3.0"]
+pylate = ["pylate>=1.1.4"]
+bm25s = ["bm25s>=0.2.6", "PyStemmer>=2.2.0.3"]
+gritlm = ["gritlm>=1.0.2"]
+xformers = ["xformers>=0.0.29"]
+blip2 = ["salesforce-lavis>=1.0.2"]
+
+
+[tool.coverage.report]
+
+omit = ["tests/*", "mteb/tasks/**/*", "scripts"]
+
+# Regexes for lines to exclude from consideration
+exclude_also = [
+    # Don't complain about missing debug-only code:
+    "def __repr__",
+    "if self\\.debug",
+
+    # Don't complain if tests don't hit defensive assertion code:
+    "raise AssertionError",
+    "raise NotImplementedError",
+
+    # Don't complain if non-runnable code isn't run:
+    "if 0:",
+    "if __name__ == .__main__.:",
+
+    # Don't complain about abstract methods, they aren't run:
+    "@(abc\\.)?abstractmethod",
+    ]
+
+[tool.setuptools.packages.find]
+exclude = ["tests", "results"]
+
+[tool.setuptools.package-data]
+"*" = ["*.json"]
+"mteb.abstasks" = ["the_ugly_duckling.txt"]
+
+[tool.ruff]
+
+target-version = "py39"
+
+
+[tool.ruff.lint]
+select = [
+    "F",  # pyflakes rules, 
+    "I",  # sorting for imports
+    "E",  # formatting for docs
+    "D",  # formatting for docs
+    "UP", # upgrade to latest syntax if possible
+    "FA", # Future annotations
+    "C4", # cleaner comprehensions
+]
+
+
+ignore = ["E501",   # line too long 
+        "E741",     # ambiguous variable name
+        "F403",     # undefined import
+        "D100",     # Missing docstring in public module
+        "D101",     # Missing docstring in public class
+        "D102",     # Missing docstring in public method
+        "D103",     # Missing docstring in public function
+        "D105",     # Missing docstring in magic method
+        "D104",     # Missing docstring in public package
+        "D107",     # Missing docstring in __init__
+        "D205",     # 1 blank line required between summary line and description
+        "D415",     # First line should end with a period
+        "C408",     # don't use unecc. collection call, e.g. dict over {}
+]
+
+[tool.ruff.lint.flake8-implicit-str-concat]
+allow-multiline = false
+
+[tool.ruff.lint.isort]
+required-imports = ["from __future__ import annotations"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.flake8-annotations]
+mypy-init-return = true
+suppress-none-returning = true
+
+[tool.semantic_release]
+branch = "main"
+version_toml = ["pyproject.toml:project.version"]
+build_command = "python -m pip install build; python -m build"
+tag_format = "{version}"
+
+[tool.semantic_release.commit_parser_options]
+major_types = ["breaking"]
+minor_types = ["feat"]
+patch_types = ["fix", "perf"]
+
+
+[tool.pytest.ini_options]
+addopts = """
+            --reruns 3 
+            --only-rerun requests.exceptions.ReadTimeout 
+            --only-rerun huggingface_hub.errors.HfHubHTTPError 
+            --only-rerun huggingface_hub.errors.LocalEntryNotFoundError
+            --only-rerun FileNotFoundError
+            --durations=5
+            --reruns-delay 10
+        """
+# --reruns 3 -> # Retry failed tests 3 times
+# requests.exceptions.ReadTimeout -> # HF Read timed out -> https://github.com/embeddings-benchmark/mteb/actions/runs/13275350693/job/37093688544
+# huggingface_hub.errors.HfHubHTTPError -> # HF is unavailable, e.g. seen here: https://github.com/embeddings-benchmark/mteb/actions/runs/13275350693/job/37093688544
+# huggingface_hub.errors.LocalEntryNotFoundError -> # Gateway Time-out from HF, e.g. seen here: https://github.com/embeddings-benchmark/mteb/actions/runs/13275350693/job/37093688544
+# FileNotFoundError -> HF Cache is broken:  https://github.com/embeddings-benchmark/mteb/actions/runs/13302915091/job/37147507251?pr=2029
+# --durations=5 -> Show the 5 slowest tests
+# --reruns-delay 10 -> Delay between reruns in seconds to avoid running into the same issue again
