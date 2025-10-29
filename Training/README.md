@@ -2,7 +2,12 @@
 
 We will continue to update resources and guidelines to cook state-of-the-art omnimodal representation models and hope these will contribute the community!
 
+## Env
 
+```
+pip install torch==2.7.0 torchvision==0.22.0 torchaudio==2.7.0 --index-url https://download.pytorch.org/whl/cu118
+pip install -r requirements.txt
+```
 
 ## VL training scripts
 
