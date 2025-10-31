@@ -35,7 +35,34 @@
 - **[2025-10]** Check out our [paper](https://huggingface.co/papers/2510.11693) on Huggingface Daily Papers.
 - **[2025-09]** Our paper is accepted by NeurIPS 2025.
 
-<h2>Quick Start</h2>
+<h2><img src="./assets/LCO-logo.png" width="30"> Overview</h2>
+
+- We introduce **LCO-Embedding**, a language-centric omnimodal representation learning method and the LCO-Embedding model families, setting a new state-of-the-art on [MIEB](https://huggingface.co/blog/isaacchung/introducing-mieb) (Massive Image Embedding Benchmark), while supporting audio and videos.
+- We introduce the **Generation-Representation Scaling Law**, and connect models' generative capabilities and their representation upper bound.
+- We introduce **SeaDoc**, a challenging visual document retrieval task in Southeast Asian languages, and show that continual generative pretraining before contrastive learning raises the representation upper bound.
+
+<div align='center'><img src="https://cdn-uploads.huggingface.co/production/uploads/604f67ef0fe8ff3ec13d71ef/4Wd8fDFBdT6GxqN6-KzZN.png" alt="overview" width="100%"/></div>
+
+
+<h2>📊 Evaluation Results</h2>
+
+We evaluate LCO-Embedding with the state-of-the-art embedding models, including E5-V, Voyage Multimodal 3, mmE5, and GME, on a MIEB-Lite benchmark (51 tasks) broken down by task categories.  
+
+<div align='center'><img src="https://cdn-uploads.huggingface.co/production/uploads/63108cc834c7d77420b0fd68/63WBsKh57HbNwwe3bZ-oZ.png" alt="mieb_lite" width="100%"/></div>
+
+Performance and efficiency comparisons of different training strategies using 3B and 7B variants of Qwen2.5-VL backbones.
+
+<div align='center'><img src="./assets/lora_ablation.png" alt="mieb_lite" width="100%"/></div>
+
+Scaling relationship between generation benchmark performance (X-axis) and representation benchmark performance after language-centric contrastive learning (Y-axis).
+
+<div align='center'><img src="./assets/scaling.png" alt="mieb_lite" width="100%"/></div>
+
+
+
+<h2>🔧 Getting Started</h2>
+
+<h3>Load Model and Processor</h3>
 
 ```python
 from transformers import Qwen2_5OmniThinkerForConditionalGeneration, Qwen2_5OmniProcessor
@@ -128,46 +155,17 @@ with torch.no_grad():
 all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
 ```
 
-<h2>Training</h2>
+<h3>Training</h3>
 
 See our [Training](https://github.com/LCO-Embedding/LCO-Embedding/tree/main/Training) folder! We will continue to update resources and guidelines for cooking the best MLLM-based omnimodal representation models which we hope will contribute to the community!
 
-<h2>Evaluation</h2>
+<h3>Evaluation</h3>
 
 See [Evaluation](https://github.com/LCO-Embedding/LCO-Embedding/tree/main/Evaluation) folder for documentation and code for MIEB evaluation! It supports adding your custom models as well.
 
-<h2>Analysis</h2>
+<h3>Analysis</h3>
 
 See [Analysis](https://github.com/LCO-Embedding/LCO-Embedding/tree/main/Analysis) folder, which provides analysis frameworks used for Section 2 of the LCO-Embedding paper.
-
-<h2><img src="./assets/LCO-logo.png" width="30"> Overview</h2>
-
-- We introduce **LCO-Embedding**, a language-centric omnimodal representation learning method and the LCO-Embedding model families, setting a new state-of-the-art on [MIEB](https://huggingface.co/blog/isaacchung/introducing-mieb) (Massive Image Embedding Benchmark), while supporting audio and videos.
-- We introduce the **Generation-Representation Scaling Law**, and connect models' generative capabilities and their representation upper bound.
-- We introduce **SeaDoc**, a challenging visual document retrieval task in Southeast Asian languages, and show that continual generative pretraining before contrastive learning raises the representation upper bound.
-
-<div align='center'><img src="https://cdn-uploads.huggingface.co/production/uploads/604f67ef0fe8ff3ec13d71ef/4Wd8fDFBdT6GxqN6-KzZN.png" alt="overview" width="100%"/></div>
-
-
-<h2>📊 Evaluation Results</h2>
-
-We evaluate LCO-Embedding with the state-of-the-art embedding models, including E5-V, Voyage Multimodal 3, mmE5, and GME, on a MIEB-Lite benchmark (51 tasks) broken down by task categories.  
-
-<div align='center'><img src="https://cdn-uploads.huggingface.co/production/uploads/63108cc834c7d77420b0fd68/63WBsKh57HbNwwe3bZ-oZ.png" alt="mieb_lite" width="100%"/></div>
-
-Performance and efficiency comparisons of different training strategies using 3B and 7B variants of Qwen2.5-VL backbones.
-
-<div align='center'><img src="./assets/lora_ablation.png" alt="mieb_lite" width="100%"/></div>
-
-Scaling relationship between generation benchmark performance (X-axis) and representation benchmark performance after language-centric contrastive learning (Y-axis).
-
-<div align='center'><img src="./assets/scaling.png" alt="mieb_lite" width="100%"/></div>
-
-
-
-<h2>🔧 Getting Started</h2>
-
-Ongoing: We are updating all code and resources.
 
 
 <h2>📑 Citation</h2>
