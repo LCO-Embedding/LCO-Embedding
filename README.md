@@ -41,26 +41,7 @@
 - We introduce the **Generation-Representation Scaling Law**, and connect models' generative capabilities and their representation upper bound.
 - We introduce **SeaDoc**, a challenging visual document retrieval task in Southeast Asian languages, and show that continual generative pretraining before contrastive learning raises the representation upper bound.
 
-<div align='center'><img src="https://cdn-uploads.huggingface.co/production/uploads/604f67ef0fe8ff3ec13d71ef/4Wd8fDFBdT6GxqN6-KzZN.png" alt="overview" width="100%"/></div>
-
-
-<h2>📊 Evaluation Results</h2>
-
-We evaluate LCO-Embedding with the state-of-the-art embedding models, including E5-V, Voyage Multimodal 3, mmE5, and GME, on a MIEB-Lite benchmark (51 tasks) broken down by task categories.  
-
-<div align='center'><img src="https://cdn-uploads.huggingface.co/production/uploads/63108cc834c7d77420b0fd68/63WBsKh57HbNwwe3bZ-oZ.png" alt="mieb_lite" width="100%"/></div>
-
-Performance and efficiency comparisons of different training strategies using 3B and 7B variants of Qwen2.5-VL backbones.
-
-<div align='center'><img src="./assets/lora_ablation.png" alt="mieb_lite" width="100%"/></div>
-
-Scaling relationship between generation benchmark performance (X-axis) and representation benchmark performance after language-centric contrastive learning (Y-axis).
-
-<div align='center'><img src="./assets/scaling.png" alt="mieb_lite" width="100%"/></div>
-
-
-
-<h2>🔧 Getting Started</h2>
+<h2>🔧Quick Start </h2>
 
 <h3>Load Model and Processor</h3>
 
@@ -155,6 +136,30 @@ with torch.no_grad():
 all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
 ```
 
+
+<h2> Training Methods </h2>
+
+We introduce a language-centric training framework. The following figure visualizes why text-only contrastive training can generalize to other modalities without directly training on them. In practice, our released checkpoint contains around 80% text data, and around 20% multimodal data to calibrate the embedding space into downstream task space.
+
+<div align='center'><img src="https://cdn-uploads.huggingface.co/production/uploads/604f67ef0fe8ff3ec13d71ef/4Wd8fDFBdT6GxqN6-KzZN.png" alt="overview" width="100%"/></div>
+
+
+<h2>📊 Evaluation Results</h2>
+
+We evaluate LCO-Embedding with the state-of-the-art embedding models, including E5-V, Voyage Multimodal 3, mmE5, and GME, on a MIEB-Lite benchmark (51 tasks) broken down by task categories.  
+
+<div align='center'><img src="https://cdn-uploads.huggingface.co/production/uploads/63108cc834c7d77420b0fd68/63WBsKh57HbNwwe3bZ-oZ.png" alt="mieb_lite" width="100%"/></div>
+
+Performance and efficiency comparisons of different training strategies using 3B and 7B variants of Qwen2.5-VL backbones.
+
+<div align='center'><img src="./assets/lora_ablation.png" alt="mieb_lite" width="100%"/></div>
+
+Scaling relationship between generation benchmark performance (X-axis) and representation benchmark performance after language-centric contrastive learning (Y-axis).
+
+<div align='center'><img src="./assets/scaling.png" alt="mieb_lite" width="100%"/></div>
+
+
+
 <h3>Training</h3>
 
 See our [Training](https://github.com/LCO-Embedding/LCO-Embedding/tree/main/Training) folder! We will continue to update resources and guidelines for cooking the best MLLM-based omnimodal representation models which we hope will contribute to the community!
@@ -173,13 +178,10 @@ See [Analysis](https://github.com/LCO-Embedding/LCO-Embedding/tree/main/Analysis
 If you find LCO-Embedding useful for your research and applications, please cite using this BibTeX:
 
 ```bibtex
-@misc{xiao2025scaling,
-    title={Scaling Language-Centric Omnimodal Representation Learning}, 
-    author={Chenghao Xiao and Hou Pong Chan and Hao Zhang and Weiwen Xu and Mahani Aljunied and Yu Rong},
-    year={2025},
-    eprint={2510.11693},
-    archivePrefix={arXiv},
-    primaryClass={cs.CL},
-    url={https://arxiv.org/abs/2510.11693}, 
+@article{xiao2025scaling,
+  title={Scaling Language-Centric Omnimodal Representation Learning},
+  author={Xiao, Chenghao and Chan, Hou Pong and Zhang, Hao and Xu, Weiwen and Aljunied, Mahani and Rong, Yu},
+  journal={arXiv preprint arXiv:2510.11693},
+  year={2025}
 }
 ```
