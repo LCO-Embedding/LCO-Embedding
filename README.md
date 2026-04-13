@@ -280,6 +280,10 @@ We evaluate LCO-Embedding with the state-of-the-art embedding models, including 
 
 <div align='center'><img src="https://cdn-uploads.huggingface.co/production/uploads/63108cc834c7d77420b0fd68/63WBsKh57HbNwwe3bZ-oZ.png" alt="mieb_lite" width="100%"/></div>
 
+LCO-Embedding is also SOTA on MAEB (massive audio embedding benchmark) without even training on audio. Screenshot from the MAEB paper.
+
+<div align='center'><img src="https://cdn-uploads.huggingface.co/production/uploads/63108cc834c7d77420b0fd68/cp5hfBmm51AlyO4sDnTrN.png" alt="mieb_lite" width="100%"/></div>
+
 Performance and efficiency comparisons of different training strategies using 3B and 7B variants of Qwen2.5-VL backbones.
 
 <div align='center'><img src="./assets/lora_ablation.png" alt="mieb_lite" width="100%"/></div>
