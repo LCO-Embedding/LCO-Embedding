@@ -137,6 +137,136 @@ all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
 ```
 
 
+<h3>Audio Batch Encoding</h3>
+
+```python
+import logging
+logging.getLogger("root").setLevel(logging.ERROR)
+# set this to prevent getting the Qwen Omni system prompt mismatch warning.
+
+audis = [some random audios]  * 1000
+batch_size = 4
+audio_prompt = "\nSummarize the above audio in one word:"
+
+all_audio_embeddings = []
+
+with torch.no_grad():
+  for i in tqdm(range(0, len(audios), batch_size)):
+      torch.cuda.empty_cache()
+      
+      batch_audios = audios[i : i + batch_size]
+      messages = [[
+          {
+              "role": "user",
+              "content": [
+                   {"type": "audio", "audio": audio},
+                  {"type": "text", "text": audio_prompt},
+              ],
+              
+          }
+      ] for audio in batch_audios]
+      
+      text = self.processor.apply_chat_template(
+          messages, tokenize=False, add_generation_prompt=True
+      )
+      audio_inputs, image_inputs, video_inputs = process_mm_info(
+          messages, use_audio_in_video=False
+      )
+      inputs = self.processor(
+          text=text, 
+          audio=audio_inputs, 
+          images=image_inputs, 
+          videos=video_inputs, 
+          return_tensors="pt", 
+          padding=True
+      )
+      inputs = inputs.to("cuda")
+      audio_outputs = self.model(
+          **inputs, output_hidden_states=True, return_dict=True
+      ).hidden_states[-1][:, -1, :]   
+      all_audio_embeddings.append(audio_outputs.to(torch.float16).cpu())
+      del inputs, audio_outputs
+      torch.cuda.empty_cache()
+                
+all_audio_embeddings = torch.cat(all_audio_embeddings, dim=0)
+
+```
+
+<h3>Video Batch Encoding:</h3>
+
+```python
+videos = [some random videos]  * 1000
+video_prompt = "\nSummarize the above video in one word:"
+batch_size = 4
+
+long_video = False
+# followed by some example hyperparameters to save RAM
+# for long videos. Not optimal. Tune case by case.
+
+all_video_embeddings = []
+with torch.no_grad():
+  for i in tqdm(range(0, len(videos), batch_size)):
+      torch.cuda.empty_cache()
+      
+      batch_videos = videos[i : i + batch_size]
+      if long_video:
+          messages = [[
+              {
+                  "role": "user",
+                  "content": [
+                      {
+                          "type": "video", 
+                          "video": video, 
+                          "max_pixels": 224 * 224,
+                          "fps": 1,
+                          "max_frames": 10
+                      },
+                      {"type": "text", "text": video_prompt},
+                  ],
+
+              }
+          ] for video in batch_videos]
+      else:
+          messages = [[
+              {
+                  "role": "user",
+                  "content": [
+                      {
+                          "type": "video", 
+                          "video": video, 
+                      },
+                      {"type": "text", "text": video_prompt},
+                  ],
+
+              }
+          ] for video in batch_videos]
+      
+      text = self.processor.apply_chat_template(
+          messages, tokenize=False, add_generation_prompt=True
+      )
+      audio_inputs, image_inputs, video_inputs = process_mm_info(
+          messages, use_audio_in_video=False
+      )
+      inputs = self.processor(
+          text=text, 
+          audio=audio_inputs, 
+          images=image_inputs, 
+          videos=video_inputs, 
+          return_tensors="pt", 
+          padding=True
+      )
+      inputs = inputs.to("cuda")
+      video_outputs = self.model(
+          **inputs, output_hidden_states=True, return_dict=True
+      ).hidden_states[-1][:, -1, :]   
+      all_video_embeddings.append(video_outputs.to(torch.float16).cpu())
+      
+      del inputs, video_outputs
+      torch.cuda.empty_cache()
+                
+all_video_embeddings = torch.cat(all_video_embeddings, dim=0)
+```
+
 <h2> Training Methods </h2>
 
 We introduce a language-centric training framework. The following figure visualizes why text-only contrastive training can generalize to other modalities without directly training on them. In practice, our released checkpoint contains around 80% text data, and around 20% multimodal data to calibrate the embedding space into downstream task space.
